@@ -11,21 +11,25 @@ exports.login = async (req, res) => {
       },
       userDn: req.body.email,
       userPassword: req.body.password,
-    }).then(() => {
-      Users.findOne({ where: { email: req.body.email }, raw: true }).then(
-        (user) => {
-          if (!user) {
-            return res.status(404).json({ message: "User not found." });
+    })
+      .then(() => {
+        Users.findOne({ where: { email: req.body.email }, raw: true }).then(
+          (user) => {
+            if (!user) {
+              return res.status(404).json({ message: "User not found." });
+            }
+
+            const token = jwt.sign({ user: user.id }, process.env.SECRET, {
+              expiresIn: "1d",
+            });
+
+            return res.status(200).json({ token });
           }
-
-          const token = jwt.sign({ user: user.id }, process.env.SECRET, {
-            expiresIn: "1d",
-          });
-
-          return res.status(200).json({ token });
-        }
-      );
-    });
+        );
+      })
+      .catch(() => {
+        return res.status(401).json({ message: "Erro" });
+      });
   } catch (err) {
     return res.status(401).json({ message: "Unauthorized" });
   }
