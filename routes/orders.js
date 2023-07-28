@@ -4,7 +4,6 @@ const { body, validationResult } = require("express-validator");
 const middlewares = require("../utilities/middlewares");
 
 const ordersController = require("../controllers/orders");
-const categoriesController = require("../controllers/categories");
 
 router
   .route("/")
@@ -24,35 +23,6 @@ router
     },
     ordersController.postOrder
   );
-
-router
-  .route("/categories")
-  .get(middlewares.GeneralValidations, categoriesController.getCategories)
-  .post(
-    middlewares.GeneralValidations,
-    body("categoria").notEmpty(),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(403).json({ message: errors.errors });
-      }
-      next();
-    },
-    categoriesController.createCategory
-  );
-
-router.route("/categories/:id").put(
-  middlewares.GeneralValidations,
-  body("categoria").notEmpty(),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(403).json({ message: errors.errors });
-    }
-    next();
-  },
-  categoriesController.updateCategory
-);
 
 router
   .route("/:id")

@@ -25,6 +25,7 @@ app.use(
 
 app.use("/auth", require("./routes/auth.js"));
 app.use("/orders", require("./routes/orders.js"));
+app.use("/categories", require("./routes/categories.js"));
 
 app.use("*", function (req, res) {
   return res.status(404).json({ message: "Route not found." });
