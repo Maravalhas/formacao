@@ -7,6 +7,8 @@ const connection = require("./utilities/connection");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+console.log("teste");
+
 // Swagger
 const swaggerUi = require("swagger-ui-express");
 
